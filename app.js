@@ -139,3 +139,28 @@ function showMap(lat, lng) {
 
 }
  
+if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+        console.log("--> Kliknięto Udostępnij");
+        
+        // Sprawdzamy, czy przeglądarka i system wspierają Web Share API
+        if (navigator.share) {
+            try {
+                // Generujemy link do Map Google z pobranymi wcześniej współrzędnymi
+                const mapLink = `https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLng}`;
+                
+                await navigator.share({
+                    title: 'Moje odkrycie kulinarne!',
+                    text: 'Zobacz, gdzie zjadłem coś pysznego. Gorąco polecam to miejsce!',
+                    url: mapLink
+                });
+                console.log('--> Udostępniono pomyślnie');
+            } catch (error) {
+                console.error('--> Błąd lub anulowanie udostępniania:', error.message);
+            }
+        } else {
+            // Fallback dla starszych przeglądarek lub systemów desktopowych
+            alert(`Twoja przeglądarka nie obsługuje udostępniania. \nSkopiuj ten link: \nhttps://www.google.com/maps/search/?api=1&query=${currentLat},${currentLng}`);
+        }
+    });
+}
